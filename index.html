@@ -32,6 +32,21 @@
       z-index: -1;
     }
 
+    /* 🔹 Creator watermark (non-intrusive background text) */
+    body::after {
+      content: "By Rikson";
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      font-size: 18px;
+      color: rgba(0, 0, 0, 0.05);
+      font-weight: bold;
+      z-index: 0;
+      pointer-events: none;
+      user-select: none;
+      font-family: "Comic Sans MS", cursive
+    }
+
     .container{
       max-width:760px;
       margin:32px auto;
@@ -124,9 +139,6 @@
 <body>
   <div class="container">
     <h1>Fill Your Information</h1>
-
-    <!-- form content remains the same -->
-    <!-- (everything below unchanged) -->
 
     <form id="studentForm" novalidate>
       <label for="type">Are you a School or College student:</label>
@@ -263,7 +275,6 @@
     <p class="note">⚠️ Your photo will only show if it is available.</p>
   </div>
 
-  <!-- Popups remain unchanged -->
   <div id="popup0" class="popup active">
     <div class="popup-content">
       <p>This is a page that helps you find your old school or college photos.<br><br>
