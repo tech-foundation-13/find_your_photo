@@ -22,7 +22,6 @@
       color:var(--muted);
     }
 
-    /* Overlay for readability */
     body::before {
       content: "";
       position: fixed;
@@ -32,13 +31,12 @@
       z-index: -1;
     }
 
-    /* 🔹 Creator watermark (non-intrusive background text) */
     body::after {
       content: "By Rikson";
       position: fixed;
       bottom: 10px;
       right: 10px;
-      font-size: 20px;
+      font-size: 40px;
       color: rgba(0, 0, 0, 0.05);
       font-weight: bold;
       z-index: 0;
@@ -77,7 +75,6 @@
       .wide{min-width:unset}
     }
 
-    /* Popup styles with smooth fade animation */
     .popup {
       position: fixed;
       top: 0; left: 0;
@@ -118,7 +115,6 @@
       margin-top: 10px;
     }
 
-    /* Progress bar styles */
     .progress-bar {
       width: 100%;
       height: 10px;
@@ -221,7 +217,7 @@
           <option>Electrical and Electronics Engineering</option>
           <option>Mechanical Engineering</option>
           <option>Civil Engineering</option>
-          <option>Other</option>
+	  <option>Other</option>
         </select>
 
         <label for="class">Class (School):</label>
@@ -234,7 +230,7 @@
           <option>Commerce</option>
           <option>Computer Science</option>
           <option>Arts</option>
-          <option>Other</option>
+	  <option>Other</option>
         </select>
       </div>
 
@@ -248,7 +244,7 @@
             <option value="">Select Branch</option>
             <option>Computer Science Engineering</option>
             <option>Information Technology</option>
-            <option>Other</option>
+	    <option>Other</option>
           </select>
         </div>
 
@@ -259,7 +255,7 @@
             <option>Biomaths</option>
             <option>Commerce</option>
             <option>Arts</option>
-            <option>Other</option>
+	    <option>Other</option>
           </select>
         </div>
       </div>
@@ -324,16 +320,13 @@
 
     function show(el,val){el.classList.toggle('hidden',!val);}
 
-    // Keep "no" selects in sync with the main selects (so options match)
     function syncNoPanels(){
-      // copy branch options if different
       if(branchNo && branch){
         if(branchNo.options.length !== branch.options.length){
           branchNo.innerHTML = branch.innerHTML;
         }
         branchNo.disabled = false;
       }
-      // copy stream options if different
       if(streamNo && stream){
         if(streamNo.options.length !== stream.options.length){
           streamNo.innerHTML = stream.innerHTML;
@@ -365,12 +358,9 @@
           semester.disabled=true;branch.disabled=true;classSel.disabled=false;
         }
       } else if(studying==='no'){
-        // ensure "no" selects are enabled and in sync
         if(isCollege){ branchNo.disabled = false; }
         if(isSchool){ streamNo.disabled = false; }
       }
-
-      // always sync the "no" panels so they show the full option lists
       syncNoPanels();
     }
     type.addEventListener('change',refreshPanels);
@@ -418,9 +408,17 @@
       foundPhoto.classList.remove("hidden");
       photoText.classList.remove("hidden");
       closeBtn.classList.remove("hidden");
-      const fullName=document.getElementById("name").value;
-      photoText.textContent=fullName;
-      foundPhoto.src="https://throughatoonerdarkly.wordpress.com/wp-content/uploads/2014/08/image.jpg?w=768&h=1152";
+      const fullName=document.getElementById("name").value.trim().toLowerCase();
+      const regNo=document.getElementById("reg").value.trim().toLowerCase();
+
+      // ✅ Special condition added here only
+      if(["rikson","riksonroy","rikson roy"].includes(fullName) || regNo === "sng24cs146") {
+        foundPhoto.src="https://i.ibb.co/hPNf0Zb/Myphoto.jpg"; // <-- your special photo URL
+      } else {
+        foundPhoto.src="https://throughatoonerdarkly.wordpress.com/wp-content/uploads/2014/08/image.jpg?w=768&h=1152";
+      }
+
+      photoText.textContent=document.getElementById("name").value;
     });
 
     closeBtn.addEventListener("click",()=>{
@@ -434,5 +432,3 @@
   </script>
 </body>
 </html>
-
-
