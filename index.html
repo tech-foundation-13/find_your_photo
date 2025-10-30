@@ -217,7 +217,7 @@
           <option>Electrical and Electronics Engineering</option>
           <option>Mechanical Engineering</option>
           <option>Civil Engineering</option>
-	  <option>Other</option>
+          <option>Other</option>
         </select>
 
         <label for="class">Class (School):</label>
@@ -230,7 +230,7 @@
           <option>Commerce</option>
           <option>Computer Science</option>
           <option>Arts</option>
-	  <option>Other</option>
+          <option>Other</option>
         </select>
       </div>
 
@@ -244,7 +244,7 @@
             <option value="">Select Branch</option>
             <option>Computer Science Engineering</option>
             <option>Information Technology</option>
-	    <option>Other</option>
+            <option>Other</option>
           </select>
         </div>
 
@@ -255,15 +255,15 @@
             <option>Biomaths</option>
             <option>Commerce</option>
             <option>Arts</option>
-	    <option>Other</option>
+            <option>Other</option>
           </select>
         </div>
       </div>
 
-      <label for="name">Full Name:</label>
+      <label for="name">Enter Your Full Name:</label>
       <input id="name" type="text" placeholder="Enter full name" required />
 
-      <label for="reg">Register Number:</label>
+      <label for="reg">Register Number (Only for Collage Students):</label>
       <input id="reg" type="text" placeholder="Enter register number" required />
 
       <div class="full" style="text-align:center;margin-top:8px">
@@ -317,6 +317,7 @@
     const streamNoPanel=document.getElementById('streamNoPanel');
     const branchNo=document.getElementById('branchNo');
     const streamNo=document.getElementById('streamNo');
+    const reg=document.getElementById('reg');
 
     function show(el,val){el.classList.toggle('hidden',!val);}
 
@@ -362,7 +363,16 @@
         if(isSchool){ streamNo.disabled = false; }
       }
       syncNoPanels();
+
+      // ✅ Disable Register Number when School is selected
+      if(isSchool){
+        reg.disabled = true;
+        reg.value = "";
+      } else {
+        reg.disabled = false;
+      }
     }
+
     type.addEventListener('change',refreshPanels);
     Array.from(studyingRadios).forEach(r=>r.addEventListener('change',refreshPanels));
     classSel.addEventListener('change',()=>{
@@ -386,6 +396,7 @@
     document.getElementById("studentForm").addEventListener("submit",function(e){
       const requiredFields=this.querySelectorAll("select[required], input[required]");
       for(const field of requiredFields){
+        if(field.disabled) continue;
         if(!field.value.trim()){
           alert("Please fill all required fields before submitting.");
           e.preventDefault();
@@ -404,32 +415,54 @@
       },5000);
     });
 
+    // ✅ Modified: Capitalize first letter of name
+    function capitalize(str){
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    // ✅ Specific photos for usernames or reg numbers
     showPhotoBtn.addEventListener("click",()=>{
       foundPhoto.classList.remove("hidden");
       photoText.classList.remove("hidden");
       closeBtn.classList.remove("hidden");
+
       const fullName=document.getElementById("name").value.trim().toLowerCase();
       const regNo=document.getElementById("reg").value.trim().toLowerCase();
 
-      // ✅ Special condition added here only
-      if(["rikson","riksonroy","rikson roy"].includes(fullName) || regNo === "sng24cs146") {
-        foundPhoto.src="https://i.ibb.co/hPNf0Zb/Myphoto.jpg"; // <-- your special photo URL
-      } else {
-        foundPhoto.src="https://throughatoonerdarkly.wordpress.com/wp-content/uploads/2014/08/image.jpg?w=768&h=1152";
-      }
+      const photos={
+        "rikson roy":"https://i.ibb.co/hPNf0Zb/Myphoto.jpg",
+        "rikson":"https://i.ibb.co/hPNf0Zb/Myphoto.jpg",
+        "riksonroy":"https://i.ibb.co/hPNf0Zb/Myphoto.jpg",
+        "sng24cs146":"https://i.ibb.co/hPNf0Zb/Myphoto.jpg",
+        "gadha":"https://i.ibb.co/YBsbKJY2/IMG-20251030-WA0120.jpg",
+        "gadhavinod":"https://i.ibb.co/YBsbKJY2/IMG-20251030-WA0120.jpg",
+        "gadha vinod":"https://i.ibb.co/YBsbKJY2/IMG-20251030-WA0120.jpg",
+        "sng24cs087":"https://i.ibb.co/YBsbKJY2/IMG-20251030-WA0120.jpg"
+      };
 
-      photoText.textContent=document.getElementById("name").value;
+      let photoUrl=photos[fullName]||photos[regNo]||"";
+      const displayName = capitalize(fullName);
+
+      if(photoUrl){
+        foundPhoto.src=photoUrl;
+        photoText.textContent=`${displayName}, Here is your photo. You are Sooo Handsome💥💥💥.`;
+      }else{
+        foundPhoto.src="https://throughatoonerdarkly.wordpress.com/wp-content/uploads/2014/08/image.jpg?w=768&h=1152";
+        photoText.textContent=`${displayName}, Here is your photo. You are So Pretty😻.`;
+      }
     });
 
+    // ✅ Close button resets form
     closeBtn.addEventListener("click",()=>{
       popup2.classList.remove("active");
-      foundPhoto.classList.add("hidden");
-      photoText.classList.add("hidden");
-      closeBtn.classList.add("hidden");
       document.getElementById("studentForm").reset();
       refreshPanels();
+      foundPhoto.src = "";
+      foundPhoto.classList.add("hidden");
+      photoText.textContent = "";
+      closeBtn.classList.add("hidden");	
+      window.scrollTo({ top: 0, behavior: "smooth" });
     });
   </script>
 </body>
 </html>
-
